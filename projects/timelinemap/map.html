@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
+    <!-- Here: api for reverse geocoding -->
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
     <!-- Bootstrap: Latest compiled and minified CSS -->
@@ -253,7 +254,7 @@
         });
 
         $("#accept-cookies-button").click(function () {
-            Cookies.set('cookie_notice_accepted', "true");
+            Cookies.set('cookie_notice_accepted', "true", { expires: 365, path: '' });
             $("#message").html("<div class='alert alert-success'>Cookies accepted</div>")
                     window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
