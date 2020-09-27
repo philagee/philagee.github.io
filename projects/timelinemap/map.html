@@ -193,7 +193,7 @@
 
     $(document).ready(function () {
 
-        if(Cookies.get('cookie_notice_accepted') != "true"){
+        if(!Cookies.get('cookie_notice_accepted')){
             $('#allow-cookies').modal();
         }
 
