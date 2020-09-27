@@ -264,7 +264,7 @@
         });
 
         $("#decline-cookies-button").click(function () {
-            Cookies.set('cookie_notice_accepted', "false");
+            Cookies.set('cookie_notice_accepted', "false", { expires: 365, path: '' });
             $("#message").html("<div class='alert alert-danger'>Cookies declined</div>")
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
