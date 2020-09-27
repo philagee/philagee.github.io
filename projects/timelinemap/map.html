@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <!-- Bootstrap: Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+    <!-- Bootstrap: jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap: Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap: Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Fontawesome: Latest compiled JavaScript -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- JS Cookie plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js" integrity="sha512-Meww2sXqNHxI1+5Dyh/9KAtvI9RZSA4c1K2k5iL02oiPO/RH3Q30L3M1albtqMg50u4gRTYdV4EXOQqXEI336A==" crossorigin="anonymous"></script>
+    <!-- Leaflet: CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <!-- Leaflet: Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://realculture.com/js/timelinemap-dh2020.js"></script>    
+    <style>
+        body {
+            background-color: linen;
+        }
+    
+        h1 {
+            color: maroon;
+            margin-left: 40px;
+        }
+
+        #mapid {
+            width: 800px;
+            height: 600px;
+            padding: 50px;
+            box-sizing: border-box;            
+        }
+
+        #description {
+            padding: 0.5em;
+        }
+
+
+        .map-container-center {
+            position: absolute;
+            left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              padding: 10px;
+        }
+        
+        .text-description{
+            border: 1px solid lightgrey;
+            overflow-y: scroll;
+        }
+
+        .leaflet-div-icon {
+            background: transparent;
+            border: none;
+        }
+
+        .leaflet-marker-icon .number{
+            position: relative;
+            top: 0px;
+            font-size: 18px;
+            width: 50px;
+            text-align: center;
+            color: brown;
+            background-color: aliceblue;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="w-100 d-flex justify-content-between">
+                <div class="p-2">
+                    <h3>
+                        <a href="">Map a Timeline</a> 
+                        <button id="geomap" type="button" class="btn btn-outline-primary active">GeoMap</button>&nbsp;
+                        <button id="concepts" type="button" class="btn btn-outline-primary">Concepts</button>&nbsp;
+                        <button id="references" type="button" class="btn btn-outline-primary">References</button>&nbsp;
+                    </h3>
+                </div>
+                <div class="p-2" id="message">
+                </div>
+                <div class="p-2">
+                    <button id="reset" type="button" class="btn btn-outline-primary">Reset</button>&nbsp;
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-google-link-modal">Add Google Sheet Link</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="w-100 p-2">
+                <div class="float-left">
+                    <h3 id="title"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="w-100 p-2">
+            <div class="float-left">
+                <div class="btn-group" id="date-buttons"></div>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="w-75 p-2">
+                <div class="float-left">
+                <div class="container map-container" id="mapid"></div>
+                </div>
+            </div>
+            <div class="w-25 p-2">
+                <div id="text-box" class="text-description">
+                    <div id="description"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="w-100 p-2">
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons (CC) license</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="allow-cookies" tabindex="-1" role="dialog" aria-labelledby="allowCookies" aria-hidden="true">
+        <div class="modal-dialog  modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="allowCookiesModalLabel">Allow Cookies</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>This website uses cookies to ensure the best experience. If you continue to use this site we will assume that you are happy with it.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="decline-cookies-button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
+                    <button type="button" id="accept-cookies-button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="add-google-link-modal" tabindex="-1" role="dialog" aria-labelledby="addGoogleLink" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGoogleLink">Add a link to a published Google Sheet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="https://spreadsheets.google.com/feeds/list/1SuLCYU79MR8-IRCbFsERltXd9gxit1m4Yu803qDjzIc/od6/public/values?alt=json&callback=jsonCallback">
+                    </div>
+                    <div>Column names and sheet names follow the format in this example Google Sheet link:</div>
+                    <div class="d-flex justify-content-center"><a target="_blank" href="https://docs.google.com/spreadsheets/d/1SuLCYU79MR8-IRCbFsERltXd9gxit1m4Yu803qDjzIc/edit#gid=0">https://docs.google.com/spreadsheets/d/1SuLCYU79MR8-IRCbFsERltXd9gxit1m4Yu803qDjzIc/edit#gid=0</a></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-google-link" class="btn btn-primary" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+
+    $(window).resize(function () {
+        $("#mapid").css("width", $(window).width() * 0.70);
+        $("#mapid").css("height", $(window).height() * 0.70);
+        $("#text-box").css("width", $(window).width() * 0.23);
+        $("#text-box").css("height", $(window).height() * 0.70);
+    });
+    $("#mapid").css("width", $(window).width() * 0.70);
+    $("#mapid").css("height", $(window).height() * 0.70);
+    $("#text-box").css("width", $(window).width() * 0.23);
+    $("#text-box").css("height", $(window).height() * 0.70);
+
+    $(document).ready(function () {
+
+        if(Cookies.get('cookie_notice_accepted') != "true"){
+            $('#allow-cookies').modal();
+        }
+
+        $("#concepts, #references").click(function () {
+            $("#message").html("<div class='alert alert-success'>Comming soon...</div>");
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 2000);
+        });
+
+        $("#geomap").click(function () {
+            $("#date-buttons").html("");        
+            markerGroup.clearLayers();            
+            var ss = JSON.parse(localStorage.getItem('spreadsheet'));
+            if(ss){
+                $("#message").html("<div class='alert alert-success'>Retrieving GeoMap...</div>");
+                draw_markers(ss, "all");
+                mymap.setView([31.51073, -96.4247], 4);
+            } else {
+                $("#message").html("<div class='alert alert-danger'>Error: No data found. Add a Google Sheet Link...</div>")
+            }
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 2000);
+        });
+
+
+        $("#reset").click(function () {
+            localStorage.clear();
+            $("#date-buttons").html("");
+            $("#message").html("<div class='alert alert-success'>Reset completed</div>")
+            markerGroup.clearLayers();
+            mymap.setView([0.0, 0.0], 3);
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 2000);
+        });
+            
+        $("#save-google-link").click(function () {
+            var url = $("#basic-url").val();
+            if(url){
+                $.ajax({
+                    url: url,
+                    dataType: "jsonp",
+                    jsonp: "jsonCallback",
+                    success: function (response) {
+                        console.log("response: ", response);
+                    }
+                })
+            }
+
+        });
+
+        $("#accept-cookies-button").click(function () {
+            Cookies.set('cookie_notice_accepted', "true");
+            $("#message").html("<div class='alert alert-success'>Cookies accepted</div>")
+                    window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 2000);
+        });
+
+        $("#decline-cookies-button").click(function () {
+            Cookies.set('cookie_notice_accepted', "false");
+            $("#message").html("<div class='alert alert-danger'>Cookies declined</div>")
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 2000);
+        });
+    });    
+
+    var i;
+    var platform = new H.service.Platform({
+        'apikey': Sazoox4oukeecheeRah5
+    });
+    var date_buttons = "";
+    var service = platform.getSearchService();
+
+    var mymap = L.map('mapid').setView([0.0, 0.0], 3);
+    var markerGroup = L.layerGroup().addTo(mymap);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: iomu1phahk5gi8Aifae3
+        }).addTo(mymap);
+
+    L.NumberedDivIcon = L.Icon.extend({
+        options: {
+            iconUrl: '',
+            number: '',
+            shadowUrl: null,
+            iconSize: new L.Point(25, 41),
+            iconAnchor: new L.Point(13, 41),
+            popupAnchor: new L.Point(0, -33),
+            className: 'leaflet-div-icon'
+        },
+
+        createIcon: function () {
+            var div = document.createElement('div');
+            var img = this._createImg(this.options['iconUrl']);
+            var numdiv = document.createElement('div');
+            numdiv.setAttribute("class", "number");
+            numdiv.innerHTML = this.options['number'] || '';
+            div.appendChild(img);
+            div.appendChild(numdiv);
+            this._setIconStyles(div, 'icon');
+            return div;
+        },
+
+        createShadow: function () {
+            return null;
+        }
+    });
+
+    function jsonCallback(json) {
+        markerGroup.clearLayers();
+        var dates = [];
+        var timeline = []
+        localStorage.setItem('spreadsheet', JSON.stringify(json));
+        $("#title").html(json.feed.title.$t);
+        for (i = 0; i < json.feed.entry.length; i++) {
+            var geocode_location = localStorage.getItem(json.feed.entry[i].gsx$location.$t);
+            geocode_location = JSON.parse(geocode_location);
+            if (!geocode_location) {
+                service.geocode({
+                    q: json.feed.entry[i].gsx$location.$t
+                }, (result) => {
+                    var storage_key = result.items[0].address.city + ", " + result.items[0].address.stateCode + ", " + result.items[0].address.countryCode
+                    localStorage.setItem(storage_key, JSON.stringify(result.items[0].position));
+                }, (result) => {
+                    console.log("error: ", result)
+                });
+            }
+            if (!dates.includes(json.feed.entry[i].gsx$date.$t)) {
+                dates.push(json.feed.entry[i].gsx$date.$t);
+            }
+        }
+        dates.sort();
+        localStorage.setItem('dates', JSON.stringify(dates));
+        draw_markers(json, "all");
+        mymap.setView([31.51073, -96.4247], 4);
+    }
+    
+    function draw_markers(json, event_date){
+        markerGroup.clearLayers();
+        for (i = 0; i < json.feed.entry.length; i++) {
+            if(event_date == "all" || json.feed.entry[i].gsx$date.$t == event_date){
+                var geocode_location = localStorage.getItem(json.feed.entry[i].gsx$location.$t);
+                if (geocode_location) {
+                    geo = JSON.parse(geocode_location)
+                    var marker = L.marker([geo.lat, geo.lng], {
+                        icon: new L.NumberedDivIcon({ number: json.feed.entry[i].gsx$date.$t })
+                    }).addTo(markerGroup);
+                    marker.bindPopup("<b>" + (i + 1) + ". " + json.feed.entry[i].gsx$date.$t + " - " + json.feed.entry[i].gsx$location.$t + "</b><br><b>" + json.feed.entry[i].gsx$topic.$t + "</b><br><b>" + json.feed.entry[i].gsx$person.$t + "</b><br>" + json.feed.entry[i].gsx$event.$t);
+                    marker.on('mouseover', function (ev) {
+                        var content = ev.target._popup._content;
+                        var item_nbr = content.substring(0, content.indexOf(".")).replace("<b>", "");
+                        var ss = JSON.parse(localStorage.getItem('spreadsheet'));
+                        var desc = ss.feed.entry[item_nbr - 1].gsx$description.$t;
+                        desc = "<b>" + ss.feed.entry[item_nbr - 1].gsx$date.$t + " - " + ss.feed.entry[item_nbr - 1].gsx$location.$t + "</b><br><br><b>" + ss.feed.entry[item_nbr - 1].gsx$topic.$t + "</b><br><br><b>" + ss.feed.entry[item_nbr - 1].gsx$person.$t + "</b><br><br>" + ss.feed.entry[item_nbr - 1].gsx$event.$t + "<br><br>" + desc
+                        $("#description").html(desc);
+                        ev.target.openPopup();
+                    });
+                }
+            }
+        }
+        dates = JSON.parse(localStorage.getItem('dates'));
+        date_buttons = "<button class='btn btn-outline-primary date-buttons' id='dates-all'>All</button>&nbsp;"
+        dates.forEach(function (item) {
+            date_buttons = date_buttons + "<button class='btn btn-outline-primary date-buttons' id='dates-" + item + "'>" + item + "</button>&nbsp;"
+        });
+        $("#date-buttons").html(date_buttons);
+        $(".date-buttons").bind("click", function (ev) {
+            var button_click = ev.target;
+            var date = button_click.id.split("-")[1];
+            draw_markers(json, date);
+        });
+    }
+    
+</script>
+</body>
+</hmtl>
