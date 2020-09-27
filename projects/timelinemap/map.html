@@ -39,6 +39,11 @@
 
         #description {
             padding: 0.5em;
+            background-color: whitesmoke;
+        }
+
+        #text-box {
+            background-color: whitesmoke;
         }
 
 
@@ -80,8 +85,8 @@
                 <div class="p-2">
                     <h3>
                         <a href="">Map a Timeline</a> 
-                        <button id="geomap" type="button" class="btn btn-outline-primary active">GeoMap</button>&nbsp;
-                        <button id="concepts" type="button" class="btn btn-outline-primary">Concepts</button>&nbsp;
+                        <button id="geomap" type="button" class="btn btn-outline-primary active">Map</button>&nbsp;
+                        <button id="concepts" type="button" class="btn btn-outline-primary">Terms</button>&nbsp;
                         <button id="references" type="button" class="btn btn-outline-primary">References</button>&nbsp;
                     </h3>
                 </div>
@@ -268,7 +273,6 @@
         });
     });    
 
-    var i;
     var platform = new H.service.Platform({
         'apikey': Sazoox4oukeecheeRah5
     });
@@ -321,7 +325,7 @@
         var timeline = []
         localStorage.setItem('spreadsheet', JSON.stringify(json));
         $("#title").html(json.feed.title.$t);
-        for (i = 0; i < json.feed.entry.length; i++) {
+        for (var i = 0; i < json.feed.entry.length; i++) {
             var geocode_location = localStorage.getItem(json.feed.entry[i].gsx$location.$t);
             geocode_location = JSON.parse(geocode_location);
             if (!geocode_location) {
@@ -346,12 +350,30 @@
     
     function draw_markers(json, event_date){
         markerGroup.clearLayers();
-        for (i = 0; i < json.feed.entry.length; i++) {
+        var locations = [];
+        var count = 0;
+
+        for (var i = 0; i < json.feed.entry.length; i++) {
             if(event_date == "all" || json.feed.entry[i].gsx$date.$t == event_date){
                 var geocode_location = localStorage.getItem(json.feed.entry[i].gsx$location.$t);
                 if (geocode_location) {
                     geo = JSON.parse(geocode_location)
-                    var marker = L.marker([geo.lat, geo.lng], {
+                    var geoLat = geo.lat;
+                    var geoLng = geo.lng;
+                    var location = json.feed.entry[i].gsx$location.$t;
+                    count = 0;
+                    for (var j = 0; j < locations.length; ++j) {
+                        var currentLoc = locations[j];
+                        if (currentLoc.indexOf(location) >= 0 ){
+                            count++;
+                        }
+                    }
+                    if(count > 1){
+                        geoLat = geoLat + (0.01 * count);
+                        geoLng = geoLng + (0.01 * count);
+                    }
+                    locations.push(json.feed.entry[i].gsx$location.$t)
+                    var marker = L.marker([geoLat, geoLng], {
                         icon: new L.NumberedDivIcon({ number: json.feed.entry[i].gsx$date.$t })
                     }).addTo(markerGroup);
                     marker.bindPopup("<b>" + (i + 1) + ". " + json.feed.entry[i].gsx$date.$t + " - " + json.feed.entry[i].gsx$location.$t + "</b><br><b>" + json.feed.entry[i].gsx$topic.$t + "</b><br><b>" + json.feed.entry[i].gsx$person.$t + "</b><br>" + json.feed.entry[i].gsx$event.$t);
@@ -360,7 +382,7 @@
                         var item_nbr = content.substring(0, content.indexOf(".")).replace("<b>", "");
                         var ss = JSON.parse(localStorage.getItem('spreadsheet'));
                         var desc = ss.feed.entry[item_nbr - 1].gsx$description.$t;
-                        desc = "<b>" + ss.feed.entry[item_nbr - 1].gsx$date.$t + " - " + ss.feed.entry[item_nbr - 1].gsx$location.$t + "</b><br><br><b>" + ss.feed.entry[item_nbr - 1].gsx$topic.$t + "</b><br><br><b>" + ss.feed.entry[item_nbr - 1].gsx$person.$t + "</b><br><br>" + ss.feed.entry[item_nbr - 1].gsx$event.$t + "<br><br>" + desc
+                        desc = "<p class='text-primary'><b>" + ss.feed.entry[item_nbr - 1].gsx$date.$t + "</b></p><p class='text-info'><b>" + ss.feed.entry[item_nbr - 1].gsx$person.$t + "</b></p><p class='text-success'>" + ss.feed.entry[item_nbr - 1].gsx$event.$t + "</p><p>" + ss.feed.entry[item_nbr - 1].gsx$location.$t + "</p><p>" + ss.feed.entry[item_nbr - 1].gsx$topic.$t + "</p><hr><p>" + desc + "</p>"
                         $("#description").html(desc);
                         ev.target.openPopup();
                     });
