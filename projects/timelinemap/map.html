@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="#">
     <!-- Here: api for reverse geocoding -->
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
@@ -108,9 +109,9 @@
         </div>
         <div class="row">
             <div class="w-100 p-2">
-            <div class="float-left">
-                <div class="btn-group" id="date-buttons"></div>
-            </div>
+                <div class="float-left">
+                    <div class="btn-group" id="date-buttons"></div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -127,10 +128,117 @@
         </div>
         <div class="row">
             <div class="w-100 p-2">
-                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons (CC) license</a>
+                <div class="d-flex justify-content-between w-100">                    
+                    <p><a href="#" data-toggle="modal" data-target="#software-stack">Software Stack</a>&nbsp;|&nbsp;</p>
+                    <p><a href="#" data-toggle="modal" data-target="#about">About</a></p>
+                    <p class="ml-auto p-2"><a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons (CC) license</a></p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="software-stack" tabindex="-1" role="dialog" aria-labelledby="softwareStack" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="softwareStack">Software Stack</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <th>Function</th>
+                                <th>Library</th>
+                                <th>Model</th>
+                            </tr>
+                            <tr>
+                                <td>Mapping Library</td>
+                                <td><a target="_blank" href="https://leafletjs.com/">Leaflet</a></td>
+                                <td>Free and Open-source</td>
+                            </tr>
+                            <tr>
+                                <td>Javascript Library</td>
+                                <td><a target="_blank" href="https://jquery.com/">jQuery</a></td>
+                                <td>Free and Open-source</td>
+                            </tr>
+                            <tr>
+                                <td>Mapping Grahics</td>
+                                <td><a target="_blank" href="https://www.openstreetmap.org/">OpenStreetMap</a></td>
+                                <td>Free and Open-source</td>
+                            </tr>
+
+                            <tr>
+                                <td>Visual & Interaction Design</td>
+                                <td><a target="_blank" href="https://getbootstrap.com/">Bootstrap</a></td>
+                                <td>Free and Open-source</td>
+                            </tr>
+                            <tr>
+                                <td>Cookie Plugin</td>
+                                <td><a target="_blank" href="https://github.com/js-cookie/js-cookie">JS Cookie</a></td>
+                                <td>Free and Open-source</td>
+                            </tr>
+                            <tr>
+                                <td>Fonts</td>
+                                <td>Fontawesome</td>
+                                <td>Fee-based (with freemium)</td>
+                            </tr>
+                            <tr>
+                                <td>Reverse Geocoding Service</td>
+                                <td>Here</td>
+                                <td>Fee-based (with freemium plan)</td>
+                            </tr>
+                            <tr>
+                                <td>Data Repository</td>
+                                <td>Google Docs</td>
+                                <td>Fee-based (with freemium plan)</td>
+                            </tr>
+                            <tr>
+                                <td>Web  Hosting</td>
+                                <td>Gitub Pages</td>
+                                <td>Fee-based (with freemium plan)</td>
+                            </tr>
+                        </table>
+                </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="about">About</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p><b>Map a Timeline</b> is an experiment in three inter-related areas of digital humanities education:</p>
+                        <p>1. Using visual maps to apprehend and elicit temporal and other relationships amongst a given series of events, texts, persons, or things which share a date as one attribute. The sample series for this experiment is a series of readings from a syllabus.</p>
+                        <p>2. Constructing a map visualization which can serve as one of several pedagogical tools in a toolbox of supplemental open access utilities for instructors and learners. The principal technologies enabling this capability are the Javascript mapping library Leaflet, the reverse geocoding service Here, and Google Sheets as the data source for the mapping visualizations.</p>
+                        <p>3. Incorporating analytical and representational features that promote a critical inquiry of the data, the visualizations, and the technology. The primary features enabling this critical inquiry are annotations for every item in the series and a listing of the provenance of the technologies and data used.</p>
+                        <p>For a discusson of the experiment, please refer to the following post:</p>
+                        <p><a target="_blank" href="https://dhintro2020.commons.gc.cuny.edu/">Introduction to Digital Humanities 2020 - DHUM 70000 – CUNY Graduate Center – Fall 2020</a></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="allow-cookies" tabindex="-1" role="dialog" aria-labelledby="allowCookies" aria-hidden="true">
@@ -383,7 +491,7 @@
                         var item_nbr = content.substring(0, content.indexOf(".")).replace("<b>", "");
                         var ss = JSON.parse(localStorage.getItem('spreadsheet'));
                         var desc = ss.feed.entry[item_nbr - 1].gsx$description.$t;
-                        desc = "<p class='text-primary'><b>" + ss.feed.entry[item_nbr - 1].gsx$date.$t + "</b></p><p class='text-info'><b>" + ss.feed.entry[item_nbr - 1].gsx$person.$t + "</b></p><p class='text-success'>" + ss.feed.entry[item_nbr - 1].gsx$event.$t + "</p><p>" + ss.feed.entry[item_nbr - 1].gsx$location.$t + "</p><p>" + ss.feed.entry[item_nbr - 1].gsx$topic.$t + "</p><hr><p>" + desc + "</p>"
+                        desc = "<p class='text-primary'><b>" + ss.feed.entry[item_nbr - 1].gsx$date.$t + "</b></p><p class='text-info'><b>" + ss.feed.entry[item_nbr - 1].gsx$person.$t + "</b></p><p class='text-secondary'>" + ss.feed.entry[item_nbr - 1].gsx$school.$t + ", " + ss.feed.entry[item_nbr - 1].gsx$location.$t + "</p><p class='text-success'>" + ss.feed.entry[item_nbr - 1].gsx$event.$t + "</p><p>" + ss.feed.entry[item_nbr - 1].gsx$topic.$t + "</p><hr><p>" + desc + "</p>"
                         $("#description").html(desc);
                         ev.target.openPopup();
                     });
@@ -402,6 +510,22 @@
             draw_markers(json, date);
         });
     }
+
+    var hash = function (s) {
+            /* Simple hash function. */
+            var a = 1, c = 0, h, o;
+            if (s) {
+                a = 0;
+                /*jshint plusplus:false bitwise:false*/
+                for (h = s.length - 1; h >= 0; h--) {
+                    o = s.charCodeAt(h);
+                    a = (a << 6 & 268435455) + o + (o << 14);
+                    c = a & 266338304;
+                    a = c !== 0 ? a ^ c >> 21 : a;
+                }
+            }
+            return String(a);
+        };
     
 </script>
 </body>
