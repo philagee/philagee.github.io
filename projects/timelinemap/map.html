@@ -342,8 +342,10 @@
         $("#reset").click(function () {
             localStorage.clear();
             $("#date-buttons").html("");
+            $("#title").html("");
+            $("#description").html("");
+            markerGroup.clearLayers();            
             $("#message").html("<div class='alert alert-success'>Reset completed</div>")
-            markerGroup.clearLayers();
             mymap.setView([0.0, 0.0], 3);
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
